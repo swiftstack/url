@@ -58,11 +58,14 @@ extension URL.Query {
 extension URL.Host {
     public func encode(to stream: StreamWriter) async throws {
         try await stream.write(Punycode.encode(domain: address))
+        try await _encodePort(to: stream)
+    }
+
+    // FIXME: [Concurrency] build crash
+    private func _encodePort(to stream: StreamWriter) async throws {
         if let port = port {
-            try await stream.write(":\(port)")
-            // FIXME: [Concurrency] build crash
-            // try await stream.write(.colon)
-            // try await stream.write("\(port)")
+            try await stream.write(.colon)
+            try await stream.write("\(port)")
         }
     }
 }
