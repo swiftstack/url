@@ -1,9 +1,9 @@
 import Stream
 
 extension URL {
-    public func encode<T: StreamWriter>(
+    public func encode(
         _ key: PartialKeyPath<URL>,
-        to stream: T
+        to stream: StreamWriter
     ) async throws {
         switch key {
         case \URL.path:
@@ -40,7 +40,7 @@ extension URL.Query {
         return result
     }
 
-    public func encode<T: StreamWriter>(to stream: T) async throws {
+    public func encode(to stream: StreamWriter) async throws {
         var isFirst = true
         for (key, value) in values {
             switch isFirst {
@@ -56,7 +56,7 @@ extension URL.Query {
 }
 
 extension URL.Host {
-    public func encode<T: StreamWriter>(to stream: T) async throws {
+    public func encode(to stream: StreamWriter) async throws {
         try await stream.write(Punycode.encode(domain: address))
         if let port = port {
             try await stream.write(":\(port)")
