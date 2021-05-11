@@ -18,6 +18,7 @@ let package = Package(
             name: "URL",
             dependencies: ["Stream", "Log"],
             swiftSettings: [
+                .unsafeFlags(["-Xfrontend", "-disable-availability-checking"]),
                 .unsafeFlags(["-Xfrontend", "-enable-experimental-concurrency"])
             ]),
     ]
@@ -41,6 +42,7 @@ func addTest(target: String, name: String) {
             dependencies: ["URL", "Test"],
             path: "Tests/\(target)/\(name)",
             swiftSettings: [
+                .unsafeFlags(["-Xfrontend", "-disable-availability-checking"]),
                 .unsafeFlags(["-Xfrontend", "-enable-experimental-concurrency"])
             ]))
 }
