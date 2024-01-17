@@ -2,7 +2,7 @@ import Test
 
 @testable import URL
 
-test.case("Path") {
+test("Path") {
     expect(try URL(String("/test")).path == "/test")
     expect(try URL(String("domain.com")).path == "/")
     expect(try URL(String("domain.com/test")).path == "/test")
@@ -10,12 +10,12 @@ test.case("Path") {
     expect(try URL(String("domain.com/test/#test")).path == "/test")
 }
 
-test.case("Query") {
+test("Query") {
     let url = try URL(String("/test?query=true"))
     expect(url.query == ["query" : "true"])
 }
 
-test.case("Host") {
+test("Host") {
     let host = URL.Host(address: "domain.com", port: nil)
     expect(try URL(String("http://domain.com")).host == host)
     expect(try URL(String("domain.com")).host == host)
@@ -33,31 +33,31 @@ test.case("Host") {
          hostWithPort)
 }
 
-test.case("Scheme") {
+test("Scheme") {
     expect(try URL(String("http://domain.com/")).scheme == .http)
     expect(try URL(String("https://domain.com/")).scheme == .https)
 }
 
-test.case("Fragment") {
+test("Fragment") {
     let url1 = try URL(String("http://domain.com/#fragment"))
     expect(url1.fragment == "fragment")
     let url2 = try URL(String("http://domain.com/test/#fragment"))
     expect(url2.fragment == "fragment")
 }
 
-test.case("AbsoluteString") {
+test("AbsoluteString") {
     let urlString = "http://domain.com:8080/test?query=true#fragment"
     let url = try URL(urlString)
     expect(url.absoluteString == urlString)
 }
 
-test.case("Description") {
+test("Description") {
     let urlString = "http://domain.com:8080/test?query=true#fragment"
     let url = try URL(urlString)
     expect(url.description == urlString)
 }
 
-test.case("URLEncoded") {
+test("URLEncoded") {
     let urlString =
         "/%D0%BF%D1%80%D0%B8%D0%B2%D0%B5%D1%82-%D0%BC%D0%B8%D1%80?" +
         "%D0%BA%D0%BB%D1%8E%D1%87=" +
@@ -72,16 +72,16 @@ test.case("URLEncoded") {
         "ключ2" : "значение2"])
 }
 
-test.case("Unicode") {
+test("Unicode") {
     let urlString = "http://domain.com:8080/тест?ключ=значение"
     let url = try URL(urlString)
     expect(url.description == urlString)
 }
 
-test.case("InvalidScheme") {
+test("InvalidScheme") {
     expect(throws: URL.Error.invalidScheme) {
         try URL(String("htt://"))
     }
 }
 
-test.run()
+await run()

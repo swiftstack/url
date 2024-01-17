@@ -1,34 +1,34 @@
 import Test
 import URL
 
-test.case("Encode") {
+test("Encode") {
     let encoded = Punycode.encode(domain: "привет.рф")
     expect(encoded == "xn--b1agh1afp.xn--p1ai")
 }
 
-test.case("Decode") {
+test("Decode") {
     let decoded = Punycode.decode(domain: "xn--b1agh1afp.xn--p1ai")
     expect(decoded == "привет.рф")
 }
 
-test.case("EncodeMixedCase") {
+test("EncodeMixedCase") {
     let encoded = Punycode.encode(domain: "Привет.рф")
     expect(encoded == "xn--r0a2bjk3bp.xn--p1ai")
 }
 
-test.case("DecodeMixedCase") {
+test("DecodeMixedCase") {
     let decoded = Punycode.decode(domain: "xn--r0a2bjk3bp.xn--p1ai")
     expect(decoded == "Привет.рф")
 }
 
-test.case("EncodeMixedASCII") {
+test("EncodeMixedASCII") {
     let encoded = Punycode.encode(domain: "hello-мир.рф")
     expect(encoded == "xn--hello--upf5a1b.xn--p1ai")
 }
 
-test.case("DecodeMixedASCII") {
+test("DecodeMixedASCII") {
     let decoded = Punycode.decode(domain: "xn--hello--upf5a1b.xn--p1ai")
     expect(decoded == "hello-мир.рф")
 }
 
-test.run()
+await run()
