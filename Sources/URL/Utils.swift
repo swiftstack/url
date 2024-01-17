@@ -6,4 +6,3 @@ extension Array where Element == UInt8 {
         self = [UInt8](value.utf8)
     }
 }
-

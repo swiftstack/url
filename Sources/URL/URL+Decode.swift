@@ -80,7 +80,7 @@ extension URL {
             index = domainEndIndex
 
             let domain = String(decoding: slice, as: UTF8.self)
-            var port: Int? = nil
+            var port: Int?
 
             if index < bytes.endIndex && bytes[index] == .colon {
                 index += 1
@@ -162,7 +162,7 @@ extension URL {
 
 extension URL.Query {
     public init(string: String) throws {
-        var values =  [String : String]()
+        var values =  [String: String]()
         for pair in string.components(separatedBy: "&") {
             if let index = pair.firstIndex(of: "=") {
                 let valueIndex = pair.index(after: index)
@@ -181,7 +181,7 @@ extension URL.Query {
     public init<T: RandomAccessCollection>(from bytes: T) throws
         where T.Element == UInt8, T.Index == Int
     {
-        var values =  [String : String]()
+        var values = [String: String]()
         for pair in bytes.split(separator: .ampersand) {
             if var index = pair.firstIndex(of: .equal) {
                 let name = try String(removingPercentEncoding: pair[..<index])
@@ -209,7 +209,7 @@ extension URL {
         url.host = nil
 
         url.path = try await stream.read(allowedBytes: .path) { bytes in
-            return try String(removingPercentEncoding: bytes)
+            try String(removingPercentEncoding: bytes)
         }
 
         switch try await stream.consume(.questionMark) {
@@ -219,10 +219,10 @@ extension URL {
 
         switch try await stream.consume(.hash) {
         case true:
-            url.fragment = try await stream.read(allowedBytes: .fragment)
-            { bytes in
-                return try String(removingPercentEncoding: bytes)
-            }
+            url.fragment =
+                try await stream.read(allowedBytes: .fragment) { bytes in
+                    try String(removingPercentEncoding: bytes)
+                }
         default:
             url.fragment = nil
         }
@@ -234,16 +234,16 @@ extension URL.Host {
     public static func decode<T: StreamReader>(
         from stream: T
     ) async throws -> Self {
-        let address = try await stream.read(allowedBytes: .domain)
-        { bytes -> String in
-            guard bytes.count > 0 else {
-                throw URL.Error.invalidHost
+        let address =
+            try await stream.read(allowedBytes: .domain) { bytes -> String in
+                guard bytes.count > 0 else {
+                    throw URL.Error.invalidHost
+                }
+                switch Punycode.isEncoded(domain: bytes) {
+                case true: return Punycode.decode(domain: bytes)
+                case false: return String(decoding: bytes, as: UTF8.self)
+                }
             }
-            switch Punycode.isEncoded(domain: bytes) {
-            case true: return Punycode.decode(domain: bytes)
-            case false: return String(decoding: bytes, as: UTF8.self)
-            }
-        }
 
         guard try await stream.consume(.colon) else {
             return .init(address: address, port: nil)
@@ -260,20 +260,20 @@ extension URL.Query {
     public static func decode<T: StreamReader>(
         from stream: T
     ) async throws -> Self {
-        var values =  [String : String]()
+        var values =  [String: String]()
 
         while true {
-            let name = try await stream.read(allowedBytes: .queryPart)
-            { bytes in
-                return try String(removingPercentEncoding: bytes)
-            }
+            let name =
+                try await stream.read(allowedBytes: .queryPart) { bytes in
+                    return try String(removingPercentEncoding: bytes)
+                }
             guard try await stream.consume(.equal) else {
                 throw URL.Error.invalidQuery
             }
-            let value = try await stream.read(allowedBytes: .queryPart)
-            { bytes in
-                return try String(removingPercentEncoding: bytes)
-            }
+            let value =
+                try await stream.read(allowedBytes: .queryPart) { bytes in
+                    return try String(removingPercentEncoding: bytes)
+                }
 
             values[name] = value
 

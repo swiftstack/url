@@ -12,7 +12,7 @@ test("Path") {
 
 test("Query") {
     let url = try URL(String("/test?query=true"))
-    expect(url.query == ["query" : "true"])
+    expect(url.query == ["query": "true"])
 }
 
 test("Host") {
@@ -68,8 +68,8 @@ test("URLEncoded") {
     let url = try URL(urlString)
     expect(url.path == "/привет-мир")
     expect(url.query?.values == [
-        "ключ" : "значение",
-        "ключ2" : "значение2"])
+        "ключ": "значение",
+        "ключ2": "значение2"])
 }
 
 test("Unicode") {

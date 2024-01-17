@@ -32,9 +32,15 @@ extension URL.Query {
             case true: isFirst = false
             case false: result.append(.ampersand)
             }
-            result.append(contentsOf: URL.encode(key, allowedCharacters: .queryPartAllowed))
+            result.append(contentsOf: URL.encode(
+                key,
+                allowedCharacters: .queryPartAllowed
+            ))
             result.append(.equal)
-            result.append(contentsOf: URL.encode(value, allowedCharacters: .queryPartAllowed))
+            result.append(contentsOf: URL.encode(
+                value,
+                allowedCharacters: .queryPartAllowed
+            ))
         }
 
         return result
@@ -48,9 +54,15 @@ extension URL.Query {
             case false: try await stream.write(.ampersand)
             }
 
-            try await stream.write(URL.encode(key, allowedCharacters: .queryPartAllowed))
+            try await stream.write(URL.encode(
+                key,
+                allowedCharacters: .queryPartAllowed
+            ))
             try await stream.write(.equal)
-            try await stream.write(URL.encode(value, allowedCharacters: .queryPartAllowed))
+            try await stream.write(URL.encode(
+                value,
+                allowedCharacters: .queryPartAllowed
+            ))
         }
     }
 }

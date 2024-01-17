@@ -6,8 +6,8 @@ let hexchars: [UInt8] = [
 extension URL {
     static func encode(
         _ string: String,
-        allowedCharacters: Set<UInt8>) -> [UInt8]
-    {
+        allowedCharacters: Set<UInt8>
+    ) -> [UInt8] {
         guard !string.isEmpty else {
             return []
         }
@@ -20,8 +20,8 @@ extension URL {
     // TODO: Handle special cases & Opmtimize using ascii table
     static func encode(
         _ bytes: UnsafeBufferPointer<UInt8>,
-        allowedCharacters: Set<UInt8>) -> [UInt8]
-    {
+        allowedCharacters: Set<UInt8>
+    ) -> [UInt8] {
         var result = [UInt8]()
         for byte in bytes {
             if allowedCharacters.contains(byte) {

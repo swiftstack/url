@@ -52,7 +52,7 @@ extension Punycode {
                 result.append(UInt32(UInt8.dot))
             }
             guard part.isPunycode else {
-                result.append(contentsOf: part.map{ UInt32($0) })
+                result.append(contentsOf: part.map { UInt32($0) })
                 continue
             }
             result.append(contentsOf: decode(part))
@@ -107,11 +107,9 @@ public struct Punycode {
         var output = asciiPrefix
 
         var handled = 0
-        for unicodeScalar in input {
-            if unicodeScalar.isASCII {
-                output.append(UInt8(unicodeScalar.value))
+        for unicodeScalar in input where unicodeScalar.isASCII {
+            output.append(UInt8(unicodeScalar.value))
                 handled += 1
-            }
         }
         let basic = handled
         if handled > 0 {
@@ -258,7 +256,7 @@ extension StringProtocol {
     }
 }
 
-fileprivate let punycodePrefix = [UInt8](Punycode.prefix.utf8)
+private let punycodePrefix = [UInt8](Punycode.prefix.utf8)
 extension RandomAccessCollection where Element == UInt8, Index == Int {
     fileprivate var isPunycode: Bool {
         return starts(with: punycodePrefix)

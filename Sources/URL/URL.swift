@@ -7,9 +7,9 @@ public struct URL {
     }
 
     public struct Query: Equatable {
-        public var values: [String : String]
+        public var values: [String: String]
 
-        public init(values: [String : String]) {
+        public init(values: [String: String]) {
             self.values = values
         }
     }
@@ -51,7 +51,6 @@ extension URL {
     }
 }
 
-
 extension URL.Query {
     public subscript(_ name: String) -> String? {
         get {
@@ -64,7 +63,7 @@ extension URL.Query {
 }
 
 extension URL: Equatable {
-    public static func ==(lhs: URL, rhs: URL) -> Bool {
+    public static func == (lhs: URL, rhs: URL) -> Bool {
         // all but fragment
         return lhs.scheme == rhs.scheme
             && lhs.host == rhs.host
@@ -72,7 +71,7 @@ extension URL: Equatable {
             && lhs.query == rhs.query
     }
 
-    public static func ==(lhs: URL, rhs: String) -> Bool {
+    public static func == (lhs: URL, rhs: String) -> Bool {
         guard let rhs = try? URL(rhs) else {
             return false
         }
